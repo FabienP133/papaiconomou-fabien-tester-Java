@@ -87,7 +87,10 @@ public class TicketDAO {
         return false;
     }
 
-    //getNbTicket
+    public int getNbTicket(String vehicleRegNumber) throws ClassNotFoundException {
+        int nbTickets = 0;
+        return nbTickets;
+    }
 
 
 }

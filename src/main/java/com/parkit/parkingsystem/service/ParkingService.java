@@ -45,6 +45,7 @@ public class ParkingService {
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
+                System.out.println("Welcome to the parking");
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
@@ -63,7 +64,7 @@ public class ParkingService {
         int parkingNumber=0;
         ParkingSpot parkingSpot = null;
         try{
-            ParkingType parkingType = getVehichleType();
+            ParkingType parkingType = getVehicleType();
             parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
             if(parkingNumber > 0){
                 parkingSpot = new ParkingSpot(parkingNumber,parkingType, true);
@@ -77,8 +78,8 @@ public class ParkingService {
         }
         return parkingSpot;
     }
-
-    private ParkingType getVehichleType(){
+    
+    private ParkingType getVehicleType(){
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
@@ -103,8 +104,13 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket, false);
+            int nbTicket = ticketDAO.getNbTicket(vehicleRegNumber); //ca ecrit si le vehicule est récurrent
+            boolean discount = nbTicket > 1;
+            fareCalculatorService.calculateFare(ticket, true);
             if(ticketDAO.updateTicket(ticket)) {
+                if (discount) {
+                    System.out.println("Bienvenue, Vous bénéficiez de 5% de réduction");
+                }
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
