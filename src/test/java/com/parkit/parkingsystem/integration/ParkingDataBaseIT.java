@@ -22,6 +22,7 @@ import java.util.Date;
 
 
 import static junit.framework.Assert.*;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +47,7 @@ public class ParkingDataBaseIT {
 
     @BeforeEach
     public void setUpPerTest() throws Exception {
-        when(inputReaderUtil.readSelection()).thenReturn(1);
+        lenient().when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         dataBasePrepareService.clearDataBaseEntries();
     }
@@ -107,7 +108,7 @@ public class ParkingDataBaseIT {
         assertNotNull("La date de sortie doit être renseignée", updatedTicket.getOutTime());
 
         double expectedFare = Fare.CAR_RATE_PER_HOUR * 0.95;
-        assertEquals("Le tarif pour un client récurent = 95% du plein tarif", expectedFare);
+        assertEquals(expectedFare, updatedTicket.getPrice(), 0.005);
 
     }
 

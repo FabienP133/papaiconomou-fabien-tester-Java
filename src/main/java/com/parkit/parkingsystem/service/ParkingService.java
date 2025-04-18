@@ -104,7 +104,7 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            int nbTicket = ticketDAO.getNbTicket(vehicleRegNumber); //ca ecrit si le vehicule est récurrent
+            int nbTicket = ticketDAO.getNbTickets(vehicleRegNumber); //ca ecrit si le vehicule est récurrent
             boolean discount = nbTicket > 1;
             fareCalculatorService.calculateFare(ticket, true);
             if(ticketDAO.updateTicket(ticket)) {

@@ -87,8 +87,26 @@ public class TicketDAO {
         return false;
     }
 
-    public int getNbTicket(String vehicleRegNumber) throws ClassNotFoundException {
+    public int getNbTickets(String vehicleRegNumber) throws ClassNotFoundException {
         int nbTickets = 0;
+        PreparedStatement ps = null;
+        Connection con = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            String sql = "SELECT COUNT(*) AS ticket_count FROM ticket WHERE VEHICLE_REG_NUMBER = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                nbTickets = rs.getInt("ticket_count");
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        }catch (Exception ex){
+            logger.error("Error fetching number of tickets for vehicle" +vehicleRegNumber ,ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
         return nbTickets;
     }
 
