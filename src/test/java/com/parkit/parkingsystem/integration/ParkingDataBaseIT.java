@@ -66,7 +66,6 @@ public class ParkingDataBaseIT {
         Ticket ticket = ticketDAO.getTicket("ABCDEF"); //je récupère le ticket pour la plaque ABCDEF
         ParkingSpot spot = ticket.getParkingSpot();
         assertFalse("La place de parking doit être occupée", spot.isAvailable());
-        //TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
     }
 
     @Test
@@ -76,7 +75,7 @@ public class ParkingDataBaseIT {
         parkingService.processExitingVehicle();
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
         assertNotNull("La date de sortie doit être renseignée", ticket.getOutTime());
-        //TODO: check that the fare generated and out time are populated correctly in the database
+        assertEquals("Le tarif doit être nul si le véhicule reste moins de 30 minutes", 0, ticket.getPrice(), 0.001);
     }
 
     @Test
