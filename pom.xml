@@ -141,6 +141,9 @@
                             <excludes>
                                 <exclude>**/App.*</exclude>
                                 <exclude>**/DataBaseConfig.*</exclude>
+                                <exclude>**/InteractiveShell.class</exclude>
+                                <exclude>**/constants/*</exclude>
+                                <exclude>**/dao/*</exclude>
                             </excludes>
                         </configuration>
                     </execution>

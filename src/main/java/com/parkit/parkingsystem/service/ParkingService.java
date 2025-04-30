@@ -38,12 +38,10 @@ public class ParkingService {
                 if (nbTickets > 0) {
                     System.out.println("Bon retour !");
                 }
-                parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
+                parkingSpotDAO.updateParking(parkingSpot);
 
                 Date inTime = new Date();
                 Ticket ticket = new Ticket();
-                //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-                //ticket.setId(ticketID);
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0);
@@ -109,7 +107,7 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            int nbTicket = ticketDAO.getNbTickets(vehicleRegNumber); //ca ecrit si le vehicule est récurrent
+            int nbTicket = ticketDAO.getNbTickets(vehicleRegNumber); //Ecrit si véhcule est récurrent
             boolean discount = nbTicket > 1;
             fareCalculatorService.calculateFare(ticket, discount);
             if(ticketDAO.updateTicket(ticket)) {

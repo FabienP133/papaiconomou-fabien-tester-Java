@@ -99,7 +99,7 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareCarWithLessThanOneHourParkingTime(){
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time should give 3/4th parking fare
+        inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time doit donner 3/4th parking fare
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
@@ -113,7 +113,7 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareCarWithMoreThanADayParkingTime(){
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
+        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time doit donner 24 * parking fare per hour
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
@@ -127,12 +127,12 @@ public class FareCalculatorServiceTest {
 
     @Test
     public void calculateFareCarWithLessThan30minutesParkingTimeDescription() { // voiture -30m
-        Ticket ticket = new Ticket(); //là je crée un nouveau ticket
+        Ticket ticket = new Ticket();
         Date inTime = new Date();
-        Date outTime = new Date(inTime.getTime() + 20 * 60 * 1000); //là j'ai mis un temps au pif (20min) psq <30min
+        Date outTime = new Date(inTime.getTime() + 20 * 60 * 1000); // j'ai mis un temps au hasard (20min) car <30min
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
-        ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false)); //là j'ai mis comme quoi la place de parking elle est pour une gov
+        ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
         fareCalculatorService.calculateFare(ticket, false);
         assertEquals(0, ticket.getPrice());
     }
@@ -140,7 +140,7 @@ public class FareCalculatorServiceTest {
 
 
     @Test
-    public void calculateFareBikeWithLessThan30minutesParkingTimeDescription() { //motomoto -30m
+    public void calculateFareBikeWithLessThan30minutesParkingTimeDescription() { // moto -30m
         Ticket ticket = new Ticket();
         Date inTime = new Date();
         Date outTime = new Date(inTime.getTime() + 20 * 60 * 1000);

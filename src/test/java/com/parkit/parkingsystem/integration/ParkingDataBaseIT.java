@@ -61,7 +61,7 @@ public class ParkingDataBaseIT {
     public void testParkingACar() throws Exception { //la méthode vérifie que l'appel de processincomveh se déroule correctement et qu'un ticket est créé dans la bdd
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF"); //saisie de la plaque
-        when(inputReaderUtil.readSelection()).thenReturn(1); //la je dis que le type de véhicule est une voiture
+        when(inputReaderUtil.readSelection()).thenReturn(1); //je dis que le type de véhicule est une voiture
         parkingService.processIncomingVehicle();
         Ticket ticket = ticketDAO.getTicket("ABCDEF"); //je récupère le ticket pour la plaque ABCDEF
         ParkingSpot spot = ticket.getParkingSpot();
@@ -70,10 +70,18 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testParkingLotExit() throws Exception {
-        testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        String vehicleRegNumber = "ABCDEF";
+        Ticket ticket = new Ticket();
+        ticket.setVehicleRegNumber(vehicleRegNumber);
+        ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
+        Date inTime1 = new Date(System.currentTimeMillis() - 20 * 60 * 1000);
+        ticket.setInTime(inTime1);
+        ticketDAO.saveTicket(ticket);
+
         parkingService.processExitingVehicle();
-        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+
+        ticket = ticketDAO.getTicket("ABCDEF");
         assertNotNull("La date de sortie doit être renseignée", ticket.getOutTime());
         assertEquals("Le tarif doit être nul si le véhicule reste moins de 30 minutes", 0, ticket.getPrice(), 0.001);
     }
@@ -87,8 +95,6 @@ public class ParkingDataBaseIT {
         ticket1.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
         Date inTime1 = new Date(System.currentTimeMillis() - 2 * 60 * 60 * 1000);
         ticket1.setInTime(inTime1);
-        Date outTime1 = new Date(inTime1.getTime() + 60 * 60 * 1000);
-        ticket1.setOutTime(outTime1);
         ticketDAO.saveTicket(ticket1);
 
         Ticket ticket2 = new Ticket();
@@ -96,8 +102,6 @@ public class ParkingDataBaseIT {
         ticket2.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
         Date inTime2 = new Date(System.currentTimeMillis() - 60 * 60 * 1000);
         ticket2.setInTime(inTime2);
-        Date outTime2 = new Date (inTime2.getTime() + 60 * 60 * 1000);
-        ticket2.setOutTime(outTime2);
         ticketDAO.saveTicket(ticket2);
 
         parkingService.processExitingVehicle();
